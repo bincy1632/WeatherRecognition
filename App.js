@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ImageBackground,
+} from "react-native";
 
 const API_KEY = "5e126929af692a4c53feb3ad457f97ab";
+const img = require("./assets/wt2.webp");
 
 export default function App() {
   const [text, setText] = useState("");
@@ -17,31 +24,41 @@ export default function App() {
       .then((response) => response.json())
       .then((newdata) => setData(newdata.main))
       .catch((err) => console.log(err));
+    
+     
   }
 
   useEffect(() => {
     getWeatherData(text);
   }, [text]);
+ 
 
   return (
     <View style={styles.container}>
-      <TextInput
-        value={text}
-        onChangeText={setText}
-        style={styles.input}
-        placeholder="Enter City"
-      />
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Weather Recognition</Text>
+      </View>
+      <ImageBackground source={img} style={styles.image}>
+        <TextInput
+          value={text}
+          onChangeText={setText}
+          style={styles.input}
+          placeholder="Enter City"
+        />
 
-      {data ? (
-        <>
-          <Text>Current temperature : {data.temp}</Text>
-          <Text>Humidity : {data.humidity}</Text>
-        </>
-      ) : (
-        <Text>No data</Text>
-      )}
+        <View style={styles.result}>
+          {data? (
+            <>
+              <Text>Current temperature : {data.temp} </Text>
+              <Text>Humidity : {data.humidity}</Text>
+            </>
+          ) : (
+            <Text>No data</Text>
+          )}
+        </View>
 
-      <StatusBar style="auto" />
+        <StatusBar style="auto" />
+      </ImageBackground>
     </View>
   );
 }
@@ -49,14 +66,37 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    marginTop: 50,
+    backgroundColor: "#FCF5DB",
+    //paddingTop: Constants.statusBarHeight,
   },
+  header: {
+    alignItems: "center",
+    backgroundColor: "#C5D2EF",
+  },
+  headerTitle: {
+    fontSize: 29,
+    fontWeight: "bold",
+  },
+
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    alignItems: "center",
+  },
+
   input: {
+    marginTop: 100,
     height: 40,
     margin: 12,
+    width: 300,
     borderWidth: 1,
+    borderColor: "black",
     padding: 10,
+  },
+  result: {
+    marginTop: 80,
+    borderWidth: 2,
+    width: 200,
   },
 });
